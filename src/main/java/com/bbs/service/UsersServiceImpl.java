@@ -11,11 +11,20 @@ public class UsersServiceImpl implements UsersService {
 	
 	@Inject
 	UsersDAO dao;
-	
+
 	@Override
-	public int check_id(String user_id) throws Exception {
-		dao.check_id(user_id);
-		return 0;
+	public int idCheck(String user_id) throws Exception {
+		
+		int result = 0;
+		
+		if(dao.idCheck(user_id) != null) result = 1;
+		
+		
+		
+		return result;
+	}
+	
+	
 	}
 
-}
+

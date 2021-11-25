@@ -1,9 +1,5 @@
 package com.bbs.controller;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -12,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bbs.service.UsersService;
 
@@ -25,6 +22,7 @@ public class MainController {
 	@Inject
 	UsersService usersService;
 	
+	// url패턴이 'path/'일 경우
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String main(Model model) throws Exception {
 		
@@ -34,6 +32,8 @@ public class MainController {
 		return "main/main";
 		
 	}
+	
+	// url패턴이 'path/join'일 경우
 	// value = url 경로
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	//아래 join()은 함수 이름
@@ -44,6 +44,7 @@ public class MainController {
 		
 	}
 	
+	// url패턴이 'path/login'일 경우
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) throws Exception {
 		
@@ -51,13 +52,20 @@ public class MainController {
 		return "main/login";
 		
 	}
+	
+	// url패턴이 'idCheck/'일 경우
 	// requestmapping : url 검색할 때 사용
 	@RequestMapping(value = "/idCheck", method = RequestMethod.GET)
+	// 반환값을 바디에 출력
+	@ResponseBody
 	public String idCheck(String user_id) throws Exception {
 		
 		int result = usersService.idCheck(user_id);
 		
-		return null;
+		// result를 문자열로 바꾸기
+		// 경로를 반환해줘야함
+		return result + "";
+		
 		
 	}
 	

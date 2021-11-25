@@ -13,7 +13,7 @@ public class UsersDAOImpl implements UsersDAO {
 	SqlSession sqlSession;
 	
 	@Override
-	public int idCheck(String user_id) throws Exception {
+	public String idCheck(String user_id) throws Exception {
 		
 		// select문에서 받아오는 데이터가 1개이기 때문에 selectOne()
 		return sqlSession.selectOne("com.bbs.mappers.bbs.idCheck", user_id);
