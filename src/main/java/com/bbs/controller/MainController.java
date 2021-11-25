@@ -17,28 +17,17 @@ import com.bbs.service.UsersService;
 
 
 @Controller
-public class HomeController {
+public class MainController {	
 	
-	@Inject
-	UsersService service;
-	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) throws Exception {
-		logger.info("Welcome home! The client locale is {}.", locale);
 		
-		service.check_id(null);
+		// view안의 파일경로를 적으면 됨 main폴더를 따로 만들고 그 안에 main.jsp를 넣어두면 return "main/main";이라고 설정
+		return "main/main";
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
-		return "home";
 	}
 	
 }
