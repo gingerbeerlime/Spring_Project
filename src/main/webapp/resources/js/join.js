@@ -38,6 +38,7 @@ $(document).ready(function () {
 		$.ajax({
 			// 전송부
 			type : 'GET',		// 전송방식
+			// ./는 현재 url마지막 /땡땡을 지우고 그자리에 들어감 
 			url  : './idCheck',	// 전송할 url
 			data : {			// 전송하는 데이터
 				// parameter name : parameter value

@@ -3,6 +3,13 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bbs.mappers.bbs">
-
-
+<!-- 여기다 SQL문 작성 -->
+	<!-- 유저 아이디 중복체크 SQL : SELECT문 사용  -->
+	<!-- id : 작업명 , resultType : 반환타입 문자열  -->
+	<select id="idCheck" resultType="string">
+		SELECT user_id
+		FROM USERS 
+		WHERE user_id = #{user_id}
+	</select>
+	
 </mapper>
