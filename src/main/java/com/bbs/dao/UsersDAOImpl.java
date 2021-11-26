@@ -59,6 +59,13 @@ public class UsersDAOImpl implements UsersDAO {
 		
 	}
 
+	@Override
+	public Users login(Users users) throws Exception {
+		// sqlSession: db접속한다는 뜻
+		// selectOne은 object 하나만 넘겨줄 수 있음.
+		return sqlSession.selectOne(SESSION + ".login", users);
+	}
+
 
 
 }
