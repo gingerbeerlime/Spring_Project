@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bbs.service.UsersService;
+import com.bbs.vo.Authmail;
+import com.bbs.vo.Users;
 
 
 @Controller
@@ -56,7 +58,7 @@ public class MainController {
 	// url패턴이 'idCheck/'일 경우
 	// requestmapping : url 검색할 때 사용
 	@RequestMapping(value = "/idCheck", method = RequestMethod.GET)
-	// 반환값을 바디에 출력
+	// 반환값을 페이지에 직접 출력
 	@ResponseBody
 	public String idCheck(String user_id) throws Exception {
 		
@@ -67,6 +69,44 @@ public class MainController {
 		return result + "";
 		
 		
+	}
+	
+	// url패턴이 'path/sendAuthMail'일 경우
+	@RequestMapping(value = "/sendAuthMail", method = RequestMethod.GET)
+	// @ResponseBody를 넣지 않으면 return값이 view파일경로로 온다.
+	@ResponseBody
+	public String sendAuthMail(String user_mail) throws Exception {
+		
+		int result = usersService.setAuthnum(user_mail);
+		
+		return result + "";
+	}
+	
+	// url패턴이 'path/mailAuth'일 경우 (join.js에서 url 패턴확인)
+	// value에는 http://localhost:8081 에 붙는 url 적어줌
+	// join.js를 처리해준다고 생각하면 됨
+	@RequestMapping(value = "/mailAuth", method = RequestMethod.POST)
+	// 안붙이면 리턴값이 view의 파일경로로 옴
+	@ResponseBody	
+	// mailAuth(String user_mail, String authmail)도 가능하지만 
+	// 두개를 같이 Authmail.java에서 객체로 다루고 있기 때문에 아래로도 사용 가능
+	public String mailAuth(Authmail authmail)throws Exception {
+		
+		return usersService.checkAuthnum(authmail) + "";
+		
+	}
+	
+	// url패턴이 'path/joinAction'일 경우
+	@RequestMapping(value = "/joinAction", method = RequestMethod.POST)
+	public String joinAction(Users users, String addr1, String addr2, String addr3)throws Exception {
+		
+		users.setUser_addr(addr1 + " " + addr2 + " " + addr3);
+		usersService.joinAction(users);
+		
+		// return main/login으로 하면 url은 여전히 joinAction이기 때문에 url자체를 바꿔줘야함
+		// redirect:/ 는 http://localhost:8081/과 같다
+		// redirect:/만 하면 메인화면으로 이동
+		return "redirect:/login";
 	}
 	
 }

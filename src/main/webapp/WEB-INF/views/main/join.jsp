@@ -18,12 +18,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery.min.js" charset="UTF-8"></script>
 <script src="${path }/resources/js/address.js" charset="UTF-8"></script>
 <script src="${path }/resources/js/join.js" charset="UTF-8"></script>
-<script>
-$(document).ready(function(){
-	var msg = '${msg}';
-	if(msg != null && msg != '') alert(msg);
-});
-</script>
+
 </head>
 
 <body>
@@ -209,7 +204,7 @@ $(document).ready(function(){
 				<div class="row">
 					<!-- 상세주소 입력 -->
 					<div class="form-group col-sm-12 col-md-12 col-lg-12">
-						<input type="text" class="form-control" name="addr3" placeholder="상세주소">
+						<input type="text" class="form-control" id="addr3" name="addr3" placeholder="상세주소">
 					</div>
 				</div>
 				
@@ -311,6 +306,12 @@ $(document).ready(function(){
 	</div>
 </div>
 <!-- 주소 검색 모달 종료 -->
+<script>
+$(document).ready(function(){
+	var msg = '${msg}';
+	if(msg != null && msg != '') alert(msg);
+});
+</script>
 </body>
 
 </html>

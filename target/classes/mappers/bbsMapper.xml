@@ -12,4 +12,38 @@
 		WHERE user_id = #{user_id}
 	</select>
 	
+	<!-- 이메일 인증번호 불러오기 SQL -->
+	<!-- 여기서 resultType="int"는 Integer 객체 null값을 받아와야하기 때문에/ 기본데이터 타입 int(_int)는 널값 못받음 -->
+	<select id="getAuthnum" resultType="int">
+		SELECT auth_num
+		FROM AUTHMAIL
+		WHERE user_mail = #{user_mail}
+	</select>
+	
+	<!-- 이메일 인증번호 저장 SQL -->
+	<!-- 인서트문 반환값 없음 -->
+	<insert id="setAuthnum">
+		INSERT INTO AUTHMAIL
+		VALUES(#{user_mail}, #{auth_num})
+	</insert>
+	
+	<!-- 이메일 인증번호 수정하기 SQL -->
+	<update id="resetAuthnum">
+		UPDATE AUTHMAIL
+		SET auth_num = #{auth_num}
+		WHERE user_mail = #{user_mail}	
+	</update>
+	
+	<!-- 이메일 인증번호 삭제 SQL -->
+	<delete id="deleteAuthmail">
+		DELETE FROM AUTHMAIL
+		WHERE user_mail = #{user_mail}
+	</delete>
+	
+	<!-- 회원가입 SQL -->
+	<insert id="join">
+		INSERT INTO USERS
+		VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_gender}, #{user_email}, #{user_addr})
+	</insert>
+	
 </mapper>
