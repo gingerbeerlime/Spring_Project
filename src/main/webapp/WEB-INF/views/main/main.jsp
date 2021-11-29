@@ -13,82 +13,9 @@
 <link rel="stylesheet" href="${path}/resources/css/custom.css">
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="${path}/resources/js/bootstrap.js"></script>
-
 </head>
 <body>
-
-<!-- 메인 네비게이션 -->
-<!-- nav : 네비게이션 리스트를 만들어주는 HTML 태그 -->
-<nav class="navbar navbar-default">
-	<!-- 네비게이션 헤더 -->
-	<!-- div: 웹페이지에서 공간을 지정하는 HTML 태그 (페이지 가로 전체 차지) -->
-	<div class="navbar-header">
-		<!-- button : 버튼을 만들어주는 html 태그 -->
-		<button type="button" class="navbar-toggle collapsed" 
-		data-toggle="collapse" data-target="#bs-navbar-collapse"
-		aria-expanded = "false">
-		<!-- span: 웹페이지에서 공간을 지정하는 html태그 (컨텐츠 크기 만큼 차지)-->
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<!-- a : url을 이동시켜주는 태그 / href="" 속성에 경로 지정 -->
-		<a class="navbar-brand" href="${path }/">JSP 게시판</a>	
-	</div>
-	<!--  네비게이션 헤더 종료 -->
-	
-	<!-- 네비게이션 메뉴 -->
-	<div class="collapse navbar-collapse" id="bs-navbar-collapse">
-		
-		<!-- 메인 메뉴 -->
-		<!-- ul : 순서가 없는 리스트를 만들어주는 태그 -->
-		<ul class="nav navbar-nav">
-			<!-- li : 리스트 하나의 요소를 만들어주는 태그 -->
-			<li class="active"><a href="${path }/">메인</a></li>
-			<li><a href="${path }/bbs">게시판</a></li>			
-		</ul>
-		<!-- 메인 메뉴 종료 -->
-		
-		<!-- 마이페이지 메뉴 -->
-		<!-- 로그인이 되지 않은 상태에서 표시 -->
-		<c:if test="${empty user_id }">
-		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button"
-					aria-haspopup="true" aria-expanded="false">
-					마이페이지<span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<li><a href="${path }/login">로그인</a></li>
-					<li><a href="${path }/join">회원가입</a></li>
-				</ul>
-			</li>	
-		</ul>
-		</c:if>
-		<c:if test="${not empty user_id }">
-		<!-- 로그인된 상태에서 표시 -->
-		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle"
-					data-toggle="dropdown" role="button"
-					aria-haspopup="true" aria-expanded="false">
-					
-					마이페이지<span class="caret"></span>
-				</a>
-				<ul class="dropdown-menu">
-					<li><a href="${path }/logout">로그아웃</a></li>
-				</ul>
-			</li>	
-		</ul>
-		</c:if>
-		<!--  마이페이지 메뉴 종료 -->
-		
-	</div>
-	<!-- 네비게이션 메뉴 종료 -->
-
-</nav>
-<!-- 메인 네비게이션 종료 -->
+<jsp:include page="../mainNav.jsp" />
 <script>
 $(document).ready(function(){
 	var msg = '${msg}';

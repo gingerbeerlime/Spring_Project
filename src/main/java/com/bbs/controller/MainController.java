@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bbs.service.UsersService;
 import com.bbs.vo.Authmail;
@@ -50,7 +51,6 @@ public class MainController {
 	// url패턴이 'path/login'일 경우
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(Model model) throws Exception {
-		
 		// view안의 파일경로를 적으면 됨 main폴더를 따로 만들고 그 안에 main.jsp를 넣어두면 return "main/main";이라고 설정
 		return "main/login";
 		
@@ -114,19 +114,39 @@ public class MainController {
 	
 	// url패턴이 'path/loginAction'일 경우
 	@RequestMapping(value = "/loginAction", method = RequestMethod.POST)
-	public String loginAction(Users users, HttpSession session)throws Exception {
+	public String loginAction(Users users, HttpSession session, RedirectAttributes ra)throws Exception {
 		
 		int result = usersService.loginAction(users);
+		String url = null;
 		
 		if(result == 0) {
 			session.setAttribute("user_id", users.getUser_id());
-			// 페이지 이동 -> localhost:8081/ 홈으로 이동
+			url = "redirect:/";
 		} else {
-			// 메세지를 전달 (로그인 정보가 잘못되었습니다.)
-			// 페이지 이동 -> localhost:8081/login 으로 이동
+			// redirect 쓸 때는 model, request 사용할 수 없음
+			// model.addAttribute("msg", "로그인정보가 일치하지 않습니다.");
+			ra.addFlashAttribute("msg", "로그인 정보가 일치하지 않습니다.");
+			
+			url = "redirect:/login";
 		}
 				
-		return null;
+		return url;
+	}
+	// url패턴이 'path/logout'일 경우
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) throws Exception {
+		
+		session.invalidate();
+		
+		return "redirect:/";
+	}
+	
+	//url패턴이 'path/bbs'일 경우
+	@RequestMapping(value = "/bbs", method = RequestMethod.GET)
+	public String bbs(Model model) throws Exception {
+		
+		return "bbs/bbs";
+		
 	}
 	
 }
