@@ -1,5 +1,6 @@
 package com.bbs.controller;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -9,11 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bbs.service.BbsService;
 import com.bbs.vo.Boarder;
 
 @Controller
 @RequestMapping(value = "/bbs/*")
 public class BbsController {
+	
+	@Inject
+	BbsService bbsService;
 
 	// url패턴이 'path/bbs/'일 경우
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -38,7 +43,16 @@ public class BbsController {
 	@RequestMapping(value = "/writeAction", method = RequestMethod.POST)
 	public String writeAction(Boarder boarder, MultipartFile file , HttpSession session) throws Exception {
 		
-		return null;
+		String user_id = (String) session.getAttribute("user_id");
+		
+		if(user_id == null) {
+		
+		}
+		
+		boarder.setWriter(user_id);
+		bbsService.writeAction(boarder, file);
+		
+		return "redirect:/bbs/write";
 	}
 	
 	
