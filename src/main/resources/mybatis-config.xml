@@ -4,6 +4,7 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 <typeAliases>
+<!-- bbsMapper의 resultType에 별칭으로 사용 -->
   <typeAlias alias="Users" type="com.bbs.vo.Users"/>
   <typeAlias alias="Authmail" type="com.bbs.vo.Authmail"/>
   <typeAlias alias="Boarder" type="com.bbs.vo.Boarder"/>

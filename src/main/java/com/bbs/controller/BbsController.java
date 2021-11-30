@@ -1,5 +1,7 @@
 package com.bbs.controller;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
@@ -39,21 +41,51 @@ public class BbsController {
 		return "bbs/write";
 	}
 	
-	// url패턴이 'path/bbs/writeAction'일 경우
-	@RequestMapping(value = "/writeAction", method = RequestMethod.POST)
-	public String writeAction(Boarder boarder, MultipartFile file , HttpSession session) throws Exception {
+	// url패턴이 'path/bbs/view'일 경우
+	// int와 같은 기본데이터타입은 null값을 가질 수 없고 Integer와 같은 객체는 null값을 받을 수 있음
+	// -> 500 내부 서버 오류 방지
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view(Integer boarder_id, Model model, RedirectAttributes ra) throws Exception {
 		
-		String user_id = (String) session.getAttribute("user_id");
+		HashMap<String, Object> map = bbsService.view(boarder_id);
 		
-		if(user_id == null) {
-		
+		// map에 있는 boarder 빈을 가져와서 검증
+		if(map.get("boarder") == null) {
+			// 존재하지 않는 게시물입니다. msg 보내고 
+			ra.addFlashAttribute("msg", "존재하지 않는 게시물입니다.");
+			// bbs로 돌려보냄
+			return "redirect:/bbs";
 		}
 		
+		// boarder라는 이름으로 boarder 객체 전달
+		model.addAttribute("map", map);
+		
+		return "bbs/view";
+	}
+	
+	// url패턴이 'path/bbs/writeAction'일 경우
+	@RequestMapping(value = "/writeAction", method = RequestMethod.POST)
+	public String writeAction(Boarder boarder, MultipartFile file , HttpSession session, RedirectAttributes ra) throws Exception {
+		
+		// 세션 검증
+		String user_id = (String) session.getAttribute("user_id");
+	
+		
+		if(user_id == null) {
+			// 로그인이 필요합니다. msg전송, redirect쓸 때는 model 쓸수 없다
+			ra.addFlashAttribute("msg", "로그인이 필요합니다.");
+			return "redirect:/login";
+		}
+		
+		// 유저 아이디를 작성자로 저장
 		boarder.setWriter(user_id);
+		// 게시글 작성 기능 실행
 		bbsService.writeAction(boarder, file);
 		
-		return "redirect:/bbs/write";
+		return "redirect:/bbs";
 	}
+	
+
 	
 	
 }
