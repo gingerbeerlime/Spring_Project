@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bbs.service.BbsService;
 import com.bbs.service.UsersService;
 import com.bbs.vo.Authmail;
 import com.bbs.vo.Users;
@@ -25,6 +26,8 @@ public class MainController {
 	// @Inject : 객체를 자동으로 만들어줌
 	@Inject
 	UsersService usersService;
+	@Inject
+	BbsService bbsService;
 	
 	// url패턴이 'path/'일 경우
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -56,10 +59,67 @@ public class MainController {
 		
 	}
 	
+	//url패턴이 'path/bbs'일 경우
+	@RequestMapping(value = "/bbs", method = RequestMethod.GET)
+	public String bbs(Integer pageNumber, Model model) throws Exception {
+		
+		if(pageNumber == null) pageNumber = 1;
+		
+		model.addAttribute("map", bbsService.bbs(pageNumber));
+		
+		return "bbs/bbs";
+		
+	}
+	
+	// url패턴이 'path/joinAction'일 경우
+		@RequestMapping(value = "/joinAction", method = RequestMethod.POST)
+		// join.jsp 에서 action="./joinAction" url을 받아와서 
+		// controller에서 받아온 값을 아래 Users빈에 같은 이름을 매칭시켜 저장시킴
+		public String joinAction(Users users, String addr1, String addr2, String addr3)throws Exception {
+			
+			users.setUser_addr(addr1 + " " + addr2 + " " + addr3);
+			usersService.joinAction(users);
+			
+			// return main/login으로 하면 url은 여전히 joinAction이기 때문에 url자체를 바꿔줘야함
+			// redirect:/ 는 http://localhost:8081/과 같다
+			// redirect:/만 하면 메인화면으로 이동
+			return "redirect:/login";
+		}
+		
+		// url패턴이 'path/loginAction'일 경우
+		@RequestMapping(value = "/loginAction", method = RequestMethod.POST)
+		public String loginAction(Users users, HttpSession session, RedirectAttributes ra)throws Exception {
+			
+			int result = usersService.loginAction(users);
+			String url = null;
+			
+			if(result == 0) {
+				session.setAttribute("user_id", users.getUser_id());
+				url = "redirect:/";
+			} else {
+				// redirect 쓸 때는 model, request 사용할 수 없음
+				// model.addAttribute("msg", "로그인정보가 일치하지 않습니다.");
+				ra.addFlashAttribute("msg", "로그인 정보가 일치하지 않습니다.");
+				
+				url = "redirect:/login";
+			}
+					
+			return url;
+		}
+		// url패턴이 'path/logout'일 경우
+		@RequestMapping(value = "/logout", method = RequestMethod.GET)
+		public String logout(HttpSession session) throws Exception {
+			
+			session.invalidate();
+			
+			return "redirect:/";
+		}
+	
 	// url패턴이 'idCheck/'일 경우
 	// requestmapping : url 검색할 때 사용
 	@RequestMapping(value = "/idCheck", method = RequestMethod.GET)
 	// 반환값을 페이지에 직접 출력
+	// ajax 비동기 통신일 때는 페이지에 반환값을 출력한뒤 그 값을 받아오기 때문에 body에 출력된 값을 가져온다는 의미로 responsebody를 써줘야함
 	@ResponseBody
 	public String idCheck(String user_id) throws Exception {
 		
@@ -97,56 +157,8 @@ public class MainController {
 		
 	}
 	
-	// url패턴이 'path/joinAction'일 경우
-	@RequestMapping(value = "/joinAction", method = RequestMethod.POST)
-	// join.jsp 에서 action="./joinAction" url을 받아와서 
-	// controller에서 받아온 값을 아래 Users빈에 같은 이름을 매칭시켜 저장시킴
-	public String joinAction(Users users, String addr1, String addr2, String addr3)throws Exception {
-		
-		users.setUser_addr(addr1 + " " + addr2 + " " + addr3);
-		usersService.joinAction(users);
-		
-		// return main/login으로 하면 url은 여전히 joinAction이기 때문에 url자체를 바꿔줘야함
-		// redirect:/ 는 http://localhost:8081/과 같다
-		// redirect:/만 하면 메인화면으로 이동
-		return "redirect:/login";
-	}
 	
-	// url패턴이 'path/loginAction'일 경우
-	@RequestMapping(value = "/loginAction", method = RequestMethod.POST)
-	public String loginAction(Users users, HttpSession session, RedirectAttributes ra)throws Exception {
-		
-		int result = usersService.loginAction(users);
-		String url = null;
-		
-		if(result == 0) {
-			session.setAttribute("user_id", users.getUser_id());
-			url = "redirect:/";
-		} else {
-			// redirect 쓸 때는 model, request 사용할 수 없음
-			// model.addAttribute("msg", "로그인정보가 일치하지 않습니다.");
-			ra.addFlashAttribute("msg", "로그인 정보가 일치하지 않습니다.");
-			
-			url = "redirect:/login";
-		}
-				
-		return url;
-	}
-	// url패턴이 'path/logout'일 경우
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) throws Exception {
-		
-		session.invalidate();
-		
-		return "redirect:/";
-	}
 	
-	//url패턴이 'path/bbs'일 경우
-	@RequestMapping(value = "/bbs", method = RequestMethod.GET)
-	public String bbs(Model model) throws Exception {
-		
-		return "bbs/bbs";
-		
-	}
+
 	
 }

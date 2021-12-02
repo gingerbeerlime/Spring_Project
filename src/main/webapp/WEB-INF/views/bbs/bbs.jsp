@@ -44,7 +44,7 @@
 			</thead>	
 			<tbody>
 				
-				<c:forEach var="boarder" items="${list }">
+				<c:forEach var="boarder" items="${map.list }">
 				<tr>
 					<td>${boarder.boarder_id }</td>
 					<td><a href="${path}/bbs/view?boarder_id=${boarder.boarder_id}">${boarder.title }</a></td>
@@ -57,24 +57,24 @@
 		<%-- GET방식 전송 : URL?파라미터=데이터&파라미터=데이터 --%>
 		<ul class="pagination">
 		
-			<c:if test="${paging.pageNumber > 5 }">
+			<c:if test="${map.paging.pageNumber > 5 }">
 			
-			<li><a href="./bbs?pageNum=${paging.before }"><span class="glyphicon glyphicon-triangle-left"></span></a></li>
+			<li><a href="./bbs?pageNumber=${map.paging.before }"><span class="glyphicon glyphicon-triangle-left"></span></a></li>
 			
 			</c:if>
 			
-			<c:forEach var="i" begin="${paging.minPage }" end="${paging.maxPage }">
-				<c:if test="${i == paging.pageNumber }">
+			<c:forEach var="i" begin="${map.paging.minPage }" end="${map.paging.maxPage }">
+				<c:if test="${i == map.paging.pageNumber }">
 					<li class="active"><a>${i }</a></li> 
 				</c:if>
-				<c:if test="${i != paging.pageNumber }">
-				<li><a href="./bbs?pageNum=${i }">${i }</a></li> 
+				<c:if test="${i != map.paging.pageNumber }">
+				<li><a href="./bbs?pageNumber${i }">${i }</a></li> 
 				</c:if>
 			</c:forEach>			
 			
-			<c:if test ="${paging.next }">
+			<c:if test ="${map.paging.next }">
 			
-			<li><a href="./bbs?pageNum=${paging.forward }"><span class="glyphicon glyphicon-triangle-right"></span></a></li>
+			<li><a href="./bbs?pageNumber=${map.paging.forward }"><span class="glyphicon glyphicon-triangle-right"></span></a></li>
 		
 			</c:if>
 		

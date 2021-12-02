@@ -55,7 +55,9 @@
 					<c:if test="${not empty map.uploadFile }">
 					<tr>
 						<td>첨부파일</td>
-						<td><a href="#">${map.uploadFile.file_name }</a></td>
+						<!-- 화면 전환이 일어날 때는 a태그로 동기식으로 하고  -->
+						<!-- 화면 전환이 일어나지않고 다운로드 진행시킬 떄는 ajax로 비동기식으로 진행  -->
+						<td><a href="./downloadAction?boarder_id=${map.uploadFile.boarder_id }&file_realName=${map.uploadFile.file_realName}">${map.uploadFile.file_name }</a></td>
 					</tr>
 					</c:if>
 				</tbody>
@@ -63,7 +65,7 @@
 				<a href="../bbs" class="btn btn-default">목록</a>
 				<c:if test="${user_id eq map.boarder.writer }">
 				<a href="./update?boarder_id=${map.boarder.boarder_id}" class="btn btn-success">수정</a>
-				<a onclick="return confirm('정말 삭제하시겠습니까?')" href="./deleteAction?boarder_id=${boarder.boarder_id}" class="btn btn-danger">삭제</a>
+				<a onclick="return confirm('정말 삭제하시겠습니까?')" href="./deleteAction?boarder_id=${map.boarder.boarder_id}" class="btn btn-danger">삭제</a>
 				</c:if>
 		</form>
 	</div>
